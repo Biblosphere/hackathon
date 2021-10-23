@@ -20,4 +20,6 @@ Link example: `http://35.209.30.42:5000/recommend/1188`
 
 5. `ml_model/check.ipynb` - contains code for check how app works in realtime
 
+6. 'create_tables_MySQL.ipynb' - contains code for creation MySQL database
+
 There are not datasets, trained models in this repository 
