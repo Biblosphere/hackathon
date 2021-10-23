@@ -100,7 +100,7 @@ def get_json_books(predictions: [int]):
 def recommend(user_id):
     logging.info(f'=== LOGGING: Recieved user_id {user_id}')  
      
-    result = default_predict() 
+    # result = default_predict() 
     
     user_id = int(user_id) 
     preds = model_predictions(user_id)
