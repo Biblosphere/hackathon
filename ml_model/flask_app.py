@@ -12,6 +12,7 @@ app = Flask(__name__)
 
 logging.info('=== LOGGING: Start to load models')
 books = pd.read_csv('data/books.csv', low_memory=False).drop('Unnamed: 0', axis=1)
+books.set_index('recId', inplace=True)
 interactions = pd.read_csv('data/interactions.csv', low_memory=False).drop(['Unnamed: 0', 'date'], axis=1)
 model = joblib.load('model/model_cosine_k5')
 id_to_itemid = joblib.load('model/id_to_itemid')
@@ -55,14 +56,11 @@ def get_history(use_id):
     return list(interactions.loc[interactions['user_id'] == use_id]['item_id'].values)
 
 
-def get_json_books(predictions: [int]):
+def get_json_books(ids: [int]):
     result = []
-    for pred in predictions:
-        id = str(pred)
-        book = books.loc[books['recId'] == id]
-        title = book['title'].values[0]
-        aut = book['aut'].values[0]
-        result.append({"id": id, "title": title, "author": aut})
+    for id in ids:
+        book = books.loc[str(id)]
+        result.append({"id": str(id), "title": book['title'], "author": book['aut']})
     return result
 
 
