@@ -3,25 +3,51 @@ __Biblosphere team__
 
 Code for book recommendation solution for Moscow mayor hackathon 2021
 
-## Running app
-Running ml model is working in Google cloud platform (GCP)
+## Запущенное приложение для проверки
+Запущенное приложение работает на Google Cloud Platform (GCP). Но может быть легко развернуто на других облачных платформах.
 
-Link example: `http://35.209.30.42:5000/recommend/1188`
+Пример ссылки: `http://35.209.30.42:5000/recommend/2222`
 
-## Source
+`2222` - это id читателя.
 
-1. `ml_model/` - contains code for build, train and deploy ML model
+Инструкция по установке и запуску: `install.md`
 
-2. `ml_model/train_model.ipynb` - contans general algorithm description, model trainig and testing
+## Предсказания
 
-3. `ml_model/build_dataset.ipynb` - contains code for prepare datasets for train ml model
+`recommendations.csv` - содержит 5 рекомендаций для каждого пользователя.
 
-4. `ml_model\flask_app.py` - flask app code
 
-5. `ml_model/check.ipynb` - contains code for check how app works in realtime
+## Исходный код
 
-6. `create_tables_MySQL.ipynb` - contains code for creation MySQL database
+1. `ml_model/` - Содержит код для формирования датасетов, обучения модели и развертывания модели.
 
-7. `filter_predictions.ipynb` - contains code for filtration for recommendations
+2. `ml_model/train_model.ipynb` - Содержит описание общего алгоритма решения, а также код по тренировке и тестированию модели.
 
-There are not datasets, trained models in this repository 
+3. `ml_model/build_dataset.ipynb` - Содержит код подготовки датасетов для обучения модели.
+
+4. `ml_model/flask_app.py` - Приложение на Flask, которое обеспечивает работу модели в виде REST API сервиса.
+
+5. `ml_model/check.ipynb` - Содержит ноутбук для удобной проверки работающего приложения. 
+
+
+
+## Датасеты и сохраненная модель
+
+Файлы `data/data_1.zip`, `data/data_2.zip` содержит наши датасеты, сформированные для обучения модели (после распаковки из архива файлы должны лежать в директории `data/`):
+
+1. `books.csv` - свернутый датасет книг
+
+2. `books_map.csv` - соответствие recId каждой книги из исходного датасета в recId в свернутом датасете
+
+3. `interactions.csv` - датасет взаимодействий пользователей и книг
+
+
+Файл `model/model.zip` содержит файлы модели, используемые для предсказания в приложении flask (после распаковки из архива файлы должны лежать в директории `model/`):
+
+1. `model_cosine_k5` - обученная модель
+
+2. `sparse_user_item` - матрица users-items построенная на основании датасета `interactions.csv`
+
+3. `userid_to_id`, `id_to_userid` - в модели id пользователей были перекодированы, файлы содержат соответствия для кодирования и раскодирования этих id
+
+4. `itemid_to_id`, `id_to_itemid` - в модели id книг были перекодированы, файлы содержат соответствия для кодирования и раскодирования этих id

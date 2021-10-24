@@ -1,8 +1,10 @@
+import flask
 from flask import Flask, request
 from healthcheck import HealthCheck
 import os, joblib, logging
 import numpy as np
 import pandas as pd
+from implicit.nearest_neighbours import CosineRecommender
 
 
 logging.basicConfig(format='%(message)s', level=logging.INFO)
@@ -33,37 +35,6 @@ def hello():
     return "Welcome to Biblosphere Team's application. You can find documentation hear:..."
 
 
-def default_predict():
-    result = {
-                "recommendations": [
-                    {
-                    "id": 789,
-                    "title": "Красная шапочка",
-                    "author": "Перро"
-                    },
-                    {
-                    "id": 101112,
-                    "title": "Сказки",
-                    "author": "народ"
-                    }
-                ],
-                "history": [
-                    {
-                    "id": 123,
-                    "title": "Незнайка на Луне",
-                    "author": "Носов"
-                    },
-                    {
-                    "id": 456,
-                    "title": "Золотой ключик",
-                    "author": "Толстой"
-                    }
-                ]
-            } 
-    return result
-
-
-
 def model_predictions(user_id):
     try:
         id = userid_to_id[user_id]
@@ -77,6 +48,7 @@ def model_predictions(user_id):
                         filter_items=None, 
                         recalculate_user=False)
     return [id_to_itemid[rec[0]] for rec in recs]
+
 
 
 def get_history(use_id):
@@ -99,18 +71,19 @@ def get_json_books(predictions: [int]):
 @app.route('/recommend/<user_id>', methods=['GET'])
 def recommend(user_id):
     logging.info(f'=== LOGGING: Recieved user_id {user_id}')  
-     
-    # result = default_predict() 
     
     user_id = int(user_id) 
     preds = model_predictions(user_id)
-    history = get_history(user_id)
-    result = {"recommendations": get_json_books(preds), "history": get_json_books(history)}
-    # result = {"recommendations": get_json_books(preds)}
+    logging.info(f'=== LOGGING: preds {preds}')  
     
+    history = get_history(user_id)
+    result = {"recommendations": get_json_books(preds), "history": get_json_books(history)}   
     logging.info(f'=== LOGGING: Prepared answer: {result}') 
      
-    return result
+    resp = flask.jsonify(result)
+    resp.headers.add('Access-Control-Allow-Origin', '*')
+    
+    return resp
     
 
 
