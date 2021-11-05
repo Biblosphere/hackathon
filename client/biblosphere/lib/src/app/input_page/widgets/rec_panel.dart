@@ -1,8 +1,10 @@
+import 'package:biblosphere/src/app/input_page/input_cubit.dart';
 import 'package:biblosphere/src/domain/entities/book_essential.dart';
 import 'package:biblosphere/src/resource/resource.dart';
 import 'package:biblosphere/src/ui_kit/colors.dart';
 import 'package:biblosphere/src/ui_kit/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BookRecPanel extends StatefulWidget {
   const BookRecPanel({Key? key}) : super(key: key);
@@ -83,10 +85,21 @@ class _BookRecPanelState extends State<BookRecPanel> {
               ],
             ),
           ),
-          // Checkbox(
-          //   value: value,
-          //   onChanged: onChanged,
-          // ),
+          BlocBuilder<InputCubit, InputState>(
+            buildWhen: (prev, cur) => prev.likeBooks != cur.likeBooks,
+            builder: (context, state) => Checkbox(
+              activeColor: AppColors.accent1,
+              value: state.likeBooks.contains(bookEssential),
+              onChanged: (value) {
+                final cubit = context.read<InputCubit>();
+                if (value == true) {
+                  cubit.handleAddLikeBook(bookEssential);
+                } else {
+                  cubit.handleRemoveLikeBook(bookEssential);
+                }
+              },
+            ),
+          ),
         ],
       ),
     );
