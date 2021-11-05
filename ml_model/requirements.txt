@@ -4,3 +4,4 @@ joblib
 logging42
 numpy
 implicit
+pandas
