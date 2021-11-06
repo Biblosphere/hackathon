@@ -38,19 +38,24 @@ class ManualRecommendationCubit extends Cubit<ManualRecommendationState> {
     this._books,
     this._bookRepo,
   ) : super(const LoadingState()) {
-    onReload();
+    _initilize();
   }
 
   final Iterable<Book> _books;
   final BookRepo _bookRepo;
 
-  void onReload() async {
+  Future<void> _initilize() async {
     emit(const LoadingState());
-    final eitherBooks = await _bookRepo.getRecomendationsByBooks(_books);
+    final eitherBooks = await _bookRepo.getRecomendationsByBooks(
+        _books.where((e) => e.id != null).map((e) => e.id!));
     if (eitherBooks.success) {
       emit(LoadedState(books: eitherBooks.data!));
     } else {
       emit(ErrorState(error: eitherBooks.error!));
     }
+  }
+
+  Future<void> onReload() {
+    return _initilize();
   }
 }

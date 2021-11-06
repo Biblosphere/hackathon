@@ -16,9 +16,8 @@ class BookRepoImpl implements BookRepo {
   }
 
   @override
-  Future<Either<Iterable<Book>>> getRecomendationsByBooks(
-      Iterable<Book> likeBooks) {
-    return _apiV2.getRecomendationsByBooks(likeBooks);
+  Future<Either<Iterable<Book>>> getRecomendationsByBooks(Iterable<int> ids) {
+    return _apiV2.getRecomendationsByBooks(ids);
   }
 
   @override

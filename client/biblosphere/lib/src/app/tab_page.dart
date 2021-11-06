@@ -30,7 +30,7 @@ class TabPage extends StatelessWidget {
   }
 
   Widget _buildTabBar() {
-    final titles = ['Ввести  id', 'Холодный старт'];
+    final titles = ['Ввести  ID', 'Холодный старт'];
     Widget buildTab(String text) {
       return Tab(
         child: Text(

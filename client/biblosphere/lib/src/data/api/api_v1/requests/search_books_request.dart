@@ -7,7 +7,7 @@ import 'package:biblosphere/src/domain/entities/error.dart';
 import 'package:http/http.dart' as http;
 import 'package:biblosphere/src/core/either.dart';
 
-mixin SearchTopBooksRequest on BaseApi {
+mixin SearchBooksRequest on BaseApi {
   Future<Either<Iterable<Book>>> searchBooks(String source, int count) {
     final completer = Completer<Either<Iterable<Book>>>();
     http

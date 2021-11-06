@@ -74,6 +74,9 @@ class _SearchDialogWidget extends StatelessWidget {
                           ),
                           onChanged:
                               context.read<SearchCubit>().onSearchChanged,
+                          onEditingComplete: context
+                              .read<SearchCubit>()
+                              .onSearchChangingCompleted,
                           decoration: InputDecoration(
                             contentPadding: const EdgeInsets.only(
                               left: 16,

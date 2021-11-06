@@ -76,7 +76,10 @@ class ManualRecommendationWidget extends StatelessWidget {
   Widget _buildError(AppError error) {
     return Column(
       children: [
-        Text('$error'),
+        const Padding(
+          padding: EdgeInsets.all(16),
+          child: Text('Ошибка'),
+        ),
         Builder(
           builder: (context) => UIButton(
             onTap: context.read<ManualRecommendationCubit>().onReload,

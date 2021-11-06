@@ -173,23 +173,6 @@ class _ColdStartTabWidget extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: BlocBuilder<ColdStartCubit, ColdStartState>(
-        buildWhen: (prev, cur) {
-          final prevBooks = [
-            ...prev.recommendedBooks
-                .where((e) => e.isSelected)
-                .map((e) => e.value),
-            ...prev.manualBooks,
-          ];
-
-          final curBooks = [
-            ...cur.recommendedBooks
-                .where((e) => e.isSelected)
-                .map((e) => e.value),
-            ...cur.manualBooks,
-          ];
-
-          return prevBooks.isNotEmpty != curBooks.isNotEmpty;
-        },
         builder: (context, state) {
           final books = [
             ...state.recommendedBooks

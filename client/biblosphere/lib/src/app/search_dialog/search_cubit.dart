@@ -58,10 +58,19 @@ class SearchCubit extends Cubit<SearchState> {
 
   Future<void> onSearchChanged(String search) async {
     _search = search;
-    if (search.isEmpty) return emit(const InitialState());
+    await Future.delayed(const Duration(milliseconds: 500));
+    if (_search == search) await onSearchChangingCompleted();
+  }
+
+  Future<void> onSearchChangingCompleted() async {
+    if (_search.isEmpty) return emit(const InitialState());
+    final currentSearch = _search;
     emit(const LoadingState());
-    final either = await _bookRepo.searchBooks(search, _initialBookCount);
-    if (search == _search) {
+    final either = await _bookRepo.searchBooks(
+      currentSearch,
+      _initialBookCount,
+    );
+    if (currentSearch == _search) {
       if (either.success) {
         emit(LoadedState(
           book: either.data!,

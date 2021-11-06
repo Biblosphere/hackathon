@@ -1,6 +1,7 @@
 import 'package:biblosphere/src/domain/entities/book.dart';
 
 extension BookMapper on Book {
+  static const _idKey = 'id';
   static const _authorKey = 'author';
   static const _titleKey = 'title';
   static const _descriptionKey = 'description';
@@ -8,7 +9,12 @@ extension BookMapper on Book {
   static const _imageUrlKey = 'image';
 
   static Book fromJson(Map<String, dynamic> json) {
+    dynamic idValue = json[_idKey];
+    if (idValue is String) {
+      idValue = int.tryParse(idValue);
+    }
     return Book(
+      id: idValue as int?,
       author: json[_authorKey] as String,
       title: json[_titleKey] as String,
       description: json[_descriptionKey] as String?,
@@ -19,6 +25,7 @@ extension BookMapper on Book {
 
   Map<String, dynamic> toJson() {
     return {
+      if (id != null) _idKey: id,
       _authorKey: author,
       _titleKey: title,
       if (description != null) _descriptionKey: description,
