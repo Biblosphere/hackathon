@@ -57,7 +57,6 @@ class SearchCubit extends Cubit<SearchState> {
   var _search = '';
 
   Future<void> onSearchChanged(String search) async {
-    search = search.replaceAll(' ', '');
     _search = search;
     if (search.isEmpty) return emit(const InitialState());
     emit(const LoadingState());
