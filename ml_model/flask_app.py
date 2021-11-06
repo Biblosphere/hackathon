@@ -87,4 +87,8 @@ def recommend(user_id):
 
 
 if __name__ == "__main__":
+    # To support adhock SSL
+    #app.run(ssl_context='adhoc', host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    # To support real SSL certificate (waiting for cert file)
+    #app.run(ssl_context=('ssl.cert', 'ssl.key'), host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
