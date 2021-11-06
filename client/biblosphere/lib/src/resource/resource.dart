@@ -1,6 +1,6 @@
-import 'package:biblosphere/src/resource/book_essential_resource.dart';
+import 'package:biblosphere/src/resource/book_resource.dart';
 
-class Resource with BookEssentialResource {
+class Resource with BookResource {
   Resource._private();
 
   static final instance = Resource._private();

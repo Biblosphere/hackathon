@@ -1,6 +1,6 @@
-import 'package:biblosphere/src/domain/entities/book_essential.dart';
+import 'package:biblosphere/src/domain/entities/book.dart';
 import 'package:biblosphere/src/domain/entities/error.dart';
-import 'package:biblosphere/src/domain/repo/book_essential_repo.dart';
+import 'package:biblosphere/src/domain/repo/book_repo.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,17 +24,17 @@ class LoadingState extends SearchState {
 
 class LoadedState extends SearchState {
   const LoadedState({
-    required this.bookEssentials,
+    required this.book,
     required this.loading,
     required this.finish,
   });
 
-  final Iterable<BookEssential> bookEssentials;
+  final Iterable<Book> book;
   final bool loading;
   final bool finish;
 
   @override
-  List<Object?> get props => [bookEssentials, loading, finish];
+  List<Object?> get props => [book, loading, finish];
 }
 
 class ErrorState extends SearchState {
@@ -47,11 +47,9 @@ class ErrorState extends SearchState {
 }
 
 class SearchCubit extends Cubit<SearchState> {
-  SearchCubit({required BookEssentialRepo bookEssentialRepo})
-      : _bookEssentialRepo = bookEssentialRepo,
-        super(const InitialState());
+  SearchCubit(this._bookRepo) : super(const InitialState());
 
-  final BookEssentialRepo _bookEssentialRepo;
+  final BookRepo _bookRepo;
 
   static const _initialBookCount = 3;
   static const _stepBookCount = 3;
@@ -59,16 +57,15 @@ class SearchCubit extends Cubit<SearchState> {
   var _search = '';
 
   Future<void> onSearchChanged(String search) async {
-    search = search.trim();
+    search = search.replaceAll(' ', '');
     _search = search;
     if (search.isEmpty) return emit(const InitialState());
     emit(const LoadingState());
-    final either =
-        await _bookEssentialRepo.searchTopBooks(search, _initialBookCount);
+    final either = await _bookRepo.searchTopBooks(search, _initialBookCount);
     if (search == _search) {
       if (either.success) {
         emit(LoadedState(
-          bookEssentials: either.data!,
+          book: either.data!,
           loading: false,
           finish: false,
         ));
@@ -78,24 +75,24 @@ class SearchCubit extends Cubit<SearchState> {
     }
   }
 
-  Future<void> onMoreButtonTap() async {
+  Future<void> onLoadUpBooks() async {
     final state = this.state as LoadedState;
     final currentSearch = _search;
     emit(LoadedState(
-      bookEssentials: state.bookEssentials,
+      book: state.book,
       loading: true,
       finish: false,
     ));
-    final either = await _bookEssentialRepo.searchTopBooks(
+    final either = await _bookRepo.searchTopBooks(
       _search,
-      state.bookEssentials.length + _stepBookCount,
+      state.book.length + _stepBookCount,
     );
     if (currentSearch == _search) {
       if (either.success) {
         emit(LoadedState(
-          bookEssentials: either.data!,
+          book: either.data!,
           loading: false,
-          finish: state.bookEssentials.length == either.data!.length,
+          finish: state.book.length == either.data!.length,
         ));
       } else {
         emit(ErrorState(error: either.error!));

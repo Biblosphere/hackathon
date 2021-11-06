@@ -1,30 +1,45 @@
+import 'package:equatable/equatable.dart';
+
 class Config {
   const Config({
-    required this.baseUrlV1,
-    required this.baseUrlV2,
-    required this.hostV1,
-    required this.hostV2,
-    required this.defaultHeaders,
+    required this.apiConfigV1,
+    required this.apiConfigV2,
   });
 
   factory Config.dev() {
     return const Config(
-      baseUrlV1: 'https://us-central1-biblosphere-210106.cloudfunctions.net',
-      baseUrlV2: 'https://hackathon.biblosphere.org:5001',
-      hostV1: 'us-central1-biblosphere-210106.cloudfunctions.net',
-      hostV2: 'hackathon.biblosphere.org:5001',
-      defaultHeaders: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        //"Access-Control-Allow-Origin": "*",
-        //"Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, HEAD",
-      },
+      apiConfigV1: ApiConfig(
+        baseUrl: 'https://us-central1-biblosphere-210106.cloudfunctions.net',
+        defaultHeaders: {
+          'Host': 'us-central1-biblosphere-210106.cloudfunctions.net',
+          // 'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          // 'Access-Control-Allow-Origin': '*',
+          // 'Access-Control-Allow-Methods': 'POST, GET',
+        },
+      ),
+      apiConfigV2: ApiConfig(
+        baseUrl: 'https://hackathon.biblosphere.org:5001',
+        defaultHeaders: {
+          'Host': 'hackathon.biblosphere.org:5001',
+          // 'Accept': 'application/json',
+          // 'Content-Type': 'application/json',
+          // 'Access-Control-Allow-Origin': '*',
+          // 'Access-Control-Allow-Methods': 'POST, GET',
+        },
+      ),
     );
   }
 
-  final String baseUrlV1;
-  final String baseUrlV2;
-  final String hostV1;
-  final String hostV2;
+  final ApiConfig apiConfigV1;
+  final ApiConfig apiConfigV2;
+}
+
+class ApiConfig extends Equatable {
+  const ApiConfig({required this.baseUrl, required this.defaultHeaders});
+
+  final String baseUrl;
   final Map<String, String> defaultHeaders;
+  @override
+  List<Object?> get props => [baseUrl, defaultHeaders];
 }

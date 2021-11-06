@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:biblosphere/src/ui_kit/colors.dart';
-import 'package:biblosphere/src/ui_kit/logo.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,25 +9,30 @@ import 'package:flutter/services.dart';
 const _kTopbarMobileHeight = 60.0;
 const _kTopbarWebHeight = 140.0;
 const _kElevation = 0.0;
-const _kAutomaticallyImplyLeading = false;
 const _kBackgroundColor = AppColors.white;
 const _kSystemOverlayStyle = SystemUiOverlayStyle(
   statusBarBrightness: Brightness.light,
   statusBarIconBrightness: Brightness.dark,
   statusBarColor: kIsWeb ? null : AppColors.transparent,
 );
-const _kCenterTitle = true;
+final _kLeading = Builder(
+  builder: (context) => CupertinoButton(
+    onPressed: Navigator.of(context).pop,
+    child: const Icon(
+      CupertinoIcons.back,
+      color: AppColors.accent1,
+    ),
+  ),
+);
 
-class AppTopBar extends AppBar {
-  AppTopBar({Key? key})
+class BackButtonAppBar extends AppBar {
+  BackButtonAppBar({Key? key})
       : super(
           key: key,
           elevation: _kElevation,
-          automaticallyImplyLeading: _kAutomaticallyImplyLeading,
+          leading: _kLeading,
           systemOverlayStyle: _kSystemOverlayStyle,
           backgroundColor: _kBackgroundColor,
-          centerTitle: _kCenterTitle,
-          title: const AppLogo(),
         );
 
   @override
@@ -38,17 +43,14 @@ class AppTopBar extends AppBar {
       );
 }
 
-class AppSliverTopBar extends SliverAppBar {
-  AppSliverTopBar({Key? key, VoidCallback? onTap})
-      : super(
+class SliverBackButtonAppBar extends SliverAppBar {
+  SliverBackButtonAppBar({
+    Key? key,
+  }) : super(
           key: key,
           elevation: _kElevation,
-          automaticallyImplyLeading: _kAutomaticallyImplyLeading,
+          leading: _kLeading,
           systemOverlayStyle: _kSystemOverlayStyle,
           backgroundColor: _kBackgroundColor,
-          centerTitle: _kCenterTitle,
-          title: onTap != null
-              ? GestureDetector(onTap: onTap, child: const AppLogo())
-              : const AppLogo(),
         );
 }

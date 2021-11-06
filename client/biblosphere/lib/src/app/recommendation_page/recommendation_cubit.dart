@@ -1,22 +1,21 @@
 import 'package:biblosphere/src/domain/entities/book.dart';
-import 'package:biblosphere/src/domain/entities/book_essential.dart';
 import 'package:biblosphere/src/domain/entities/error.dart';
 import 'package:biblosphere/src/domain/repo/book_repo.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-abstract class GuidState extends Equatable {
-  const GuidState();
+abstract class RecommendationState extends Equatable {
+  const RecommendationState();
 }
 
-class LoadingState extends GuidState {
+class LoadingState extends RecommendationState {
   const LoadingState();
 
   @override
   List<Object?> get props => [];
 }
 
-class LoadedState extends GuidState {
+class LoadedState extends RecommendationState {
   const LoadedState({required this.books});
 
   final Iterable<Book> books;
@@ -25,7 +24,7 @@ class LoadedState extends GuidState {
   List<Object?> get props => [books];
 }
 
-class ErrorState extends GuidState {
+class ErrorState extends RecommendationState {
   const ErrorState({required this.error});
 
   final AppError error;
@@ -34,25 +33,20 @@ class ErrorState extends GuidState {
   List<Object?> get props => [error];
 }
 
-class GuidCubit extends Cubit<GuidState> {
-  GuidCubit(
-    this._likeBooks,
-    this._dislikeBooks,
+class RecommendationCubit extends Cubit<RecommendationState> {
+  RecommendationCubit(
+    this._books,
     this._bookRepo,
-  ) : super(_initialState) {
-    handleReloadTap();
+  ) : super(const LoadingState()) {
+    onReload();
   }
 
-  final Iterable<BookEssential> _likeBooks;
-  final Iterable<BookEssential> _dislikeBooks;
+  final Iterable<Book> _books;
   final BookRepo _bookRepo;
 
-  static const _initialState = LoadingState();
-
-  void handleReloadTap() async {
+  void onReload() async {
     emit(const LoadingState());
-    final eitherBooks =
-        await _bookRepo.getRecomendedBooks(_likeBooks, _dislikeBooks);
+    final eitherBooks = await _bookRepo.getRecomendedBooks(_books);
     if (eitherBooks.success) {
       emit(LoadedState(books: eitherBooks.data!));
     } else {

@@ -1,12 +1,12 @@
 import 'package:biblosphere/src/core/either.dart';
 import 'package:biblosphere/src/data/base_api.dart';
-import 'package:biblosphere/src/domain/entities/new_book.dart';
+import 'package:biblosphere/src/domain/entities/book.dart';
+import 'package:biblosphere/src/domain/entities/config.dart';
 
 abstract class BaseApiV2 extends BaseApi {
-  const BaseApiV2({
-    required String baseUrl,
-    required Map<String, String> defaultHeaders,
-  }) : super(baseUrl: baseUrl, defaultHeaders: defaultHeaders);
+  const BaseApiV2({required ApiConfig config}) : super(config: config);
 
-  Future<Either<NewBooks>> getNewBooks(String id);
+  Future<Either<Iterable<Book>>> getNewBooks(String id);
+
+  Future<Either<Iterable<Book>>> getRecomandations(Iterable<Book> likeBooks);
 }

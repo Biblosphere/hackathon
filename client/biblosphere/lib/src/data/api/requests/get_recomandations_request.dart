@@ -1,33 +1,30 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:biblosphere/src/data/base_api_v1.dart';
-import 'package:biblosphere/src/data/mapper/book_essentials_mapper.dart';
+import 'package:biblosphere/src/data/base_api_v2.dart';
 import 'package:biblosphere/src/data/mapper/book_mapper.dart';
 import 'package:biblosphere/src/domain/entities/error.dart';
 import 'package:http/http.dart' as http;
 import 'package:biblosphere/src/core/either.dart';
 import 'package:biblosphere/src/domain/entities/book.dart';
-import 'package:biblosphere/src/domain/entities/book_essential.dart';
 
-mixin GetRecomandationsRequest on BaseApiV1 {
+mixin GetRecommendationsRequest on BaseApiV2 {
   @override
   Future<Either<Iterable<Book>>> getRecomandations(
-    Iterable<BookEssential> likeBooks,
-    Iterable<BookEssential> dislikeBooks,
+    Iterable<Book> likeBooks,
   ) {
     final completer = Completer<Either<Iterable<Book>>>();
     http
         .post(
-      Uri.parse('$baseUrl/get_recomandations'),
-      headers: defaultHeaders,
+      Uri.parse('${config.baseUrl}/recommend_by_books/'),
+      headers: config.defaultHeaders,
       body: jsonEncode({
         'like_books': likeBooks.map((e) => e.toJson()).toList(),
-        'unlike_books': dislikeBooks.map((e) => e.toJson()).toList(),
       }),
     )
         .then((response) {
       if (response.statusCode == 200) {
-        final books = BooksMapper.fromJson(jsonDecode(response.body));
+        final json = (jsonDecode(response.body) as Map).cast<String, dynamic>();
+        final books = BooksMapper.fromJson('recommendations', json);
         completer.complete(Either.success(books));
       } else {
         throw AppError.network;

@@ -1,9 +1,8 @@
 import 'package:biblosphere/src/app/search_dialog/search_cubit.dart';
-import 'package:biblosphere/src/domain/entities/book_essential.dart';
+import 'package:biblosphere/src/domain/entities/book.dart';
 import 'package:biblosphere/src/domain/entities/error.dart';
 import 'package:biblosphere/src/ui_kit/buttons.dart';
 import 'package:biblosphere/src/ui_kit/colors.dart';
-import 'package:biblosphere/src/ui_kit/icons.dart';
 import 'package:biblosphere/src/ui_kit/loading.dart';
 import 'package:biblosphere/src/ui_kit/shadows.dart';
 import 'package:biblosphere/src/ui_kit/styles.dart';
@@ -12,26 +11,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-enum SearchDialogType { like, dislike }
-
-class SearchDialog extends StatelessWidget {
-  const SearchDialog({Key? key, required this.type}) : super(key: key);
-
-  final SearchDialogType type;
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => SearchCubit(bookEssentialRepo: context.read()),
-      child: _SearchDialogWidget(type: type),
-    );
-  }
+class SearchDialog extends BlocProvider<SearchCubit> {
+  SearchDialog({Key? key})
+      : super(
+          key: key,
+          create: (context) => SearchCubit(context.read()),
+          child: const _SearchDialogWidget(),
+        );
 }
 
 class _SearchDialogWidget extends StatelessWidget {
-  const _SearchDialogWidget({Key? key, required this.type}) : super(key: key);
-
-  final SearchDialogType type;
+  const _SearchDialogWidget({Key? key}) : super(key: key);
 
   static const _searchFieldBorder = UnderlineInputBorder(
     borderSide: BorderSide(color: AppColors.transparent),
@@ -47,8 +37,21 @@ class _SearchDialogWidget extends StatelessWidget {
             parent: AlwaysScrollableScrollPhysics(),
           ),
           slivers: [
-            AppSliverTopBar(onTap: Navigator.of(context).pop),
-            SliverToBoxAdapter(child: _buildTitle()),
+            SliverBackButtonAppBar(),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text('Ручной ввод',
+                          style: AppStyles.defaultRegularHeadline()),
+                    ),
+                    const AppCloseButton(),
+                  ],
+                ),
+              ),
+            ),
             const SliverToBoxAdapter(child: SizedBox(height: 20)),
             SliverToBoxAdapter(
               child: Container(
@@ -98,7 +101,7 @@ class _SearchDialogWidget extends StatelessWidget {
                       ],
                       if (state is LoadedState) ...[
                         _buildDivider(),
-                        ...state.bookEssentials.map((e) => _buildBookButton(e)),
+                        ...state.book.map((e) => _buildBookButton(e)),
                         if (state.loading) _buildLoadingIndicator(),
                         if (!state.loading && !state.finish) _buildMoreButton(),
                       ],
@@ -113,40 +116,6 @@ class _SearchDialogWidget extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildTitle() {
-    late final AppIcons icon;
-    switch (type) {
-      case SearchDialogType.like:
-        icon = AppIcons.like;
-        break;
-      case SearchDialogType.dislike:
-        icon = AppIcons.dislike;
-        break;
-    }
-    late final String title;
-    switch (type) {
-      case SearchDialogType.like:
-        title = 'Что Вам нравится?';
-        break;
-      case SearchDialogType.dislike:
-        title = 'А что не нравится?';
-        break;
-    }
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        children: [
-          AppIcon(icon),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Text(title, style: AppStyles.defaultRegularHeadline()),
-          ),
-          const AppCloseButton(),
-        ],
       ),
     );
   }
@@ -197,15 +166,15 @@ class _SearchDialogWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildBookButton(BookEssential bookEssential) {
+  Widget _buildBookButton(Book book) {
     return Builder(
       builder: (context) => _buildRowButton(
         withDivider: true,
         onTap: () {
-          Navigator.of(context).pop(bookEssential);
+          Navigator.of(context).pop(book);
         },
         child: Text(
-          '${bookEssential.title}, ${bookEssential.author}',
+          '${book.title}, ${book.author}',
           style: AppStyles.defaultRegularComment(
             color: AppColors.textActive,
           ),
@@ -218,7 +187,7 @@ class _SearchDialogWidget extends StatelessWidget {
     return Builder(
       builder: (context) => _buildRowButton(
         withDivider: false,
-        onTap: context.read<SearchCubit>().onMoreButtonTap,
+        onTap: context.read<SearchCubit>().onLoadUpBooks,
         child: Text(
           'Еще...',
           style: AppStyles.defaultRegularComment(color: AppColors.textDeactive),
