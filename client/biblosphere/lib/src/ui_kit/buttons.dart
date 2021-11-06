@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 import 'icons.dart';
 
-class AppButton extends StatelessWidget {
-  const AppButton({
+class UIButton extends StatelessWidget {
+  const UIButton({
     Key? key,
     required this.onTap,
     required this.child,
@@ -37,9 +37,9 @@ class AppButton extends StatelessWidget {
             ),
           ),
           backgroundColor: MaterialStateProperty.all(
-            active ? AppColors.accent1 : AppColors.textDeactive,
+            active ? UIColors.accent1 : UIColors.textDeactive,
           ),
-          shadowColor: MaterialStateProperty.all(AppColors.transparent),
+          shadowColor: MaterialStateProperty.all(UIColors.transparent),
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5),
@@ -51,16 +51,16 @@ class AppButton extends StatelessWidget {
   }
 }
 
-class AppCloseButton extends StatelessWidget {
-  const AppCloseButton({Key? key}) : super(key: key);
+class UICloseButton extends StatelessWidget {
+  const UICloseButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return CupertinoButton(
       padding: EdgeInsets.zero,
       onPressed: Navigator.of(context).pop,
-      child: const AppIcon(
-        AppIcons.close,
+      child: const UIIcon(
+        UIIcons.close,
         height: 24,
         width: 24,
       ),

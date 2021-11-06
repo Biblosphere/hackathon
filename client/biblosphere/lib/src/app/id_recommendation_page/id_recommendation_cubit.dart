@@ -44,7 +44,7 @@ class IdRecommendationCubit extends Cubit<IdRecommendationState> {
 
   Future<void> _initilize() async {
     emit(const LoadingState());
-    final either = await _bookRepo.getNewBooks(_id);
+    final either = await _bookRepo.getRecommendationsById(_id);
     if (either.success) {
       emit(LoadedState(books: either.data!));
     } else {

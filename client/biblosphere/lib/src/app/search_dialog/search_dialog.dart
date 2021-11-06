@@ -3,10 +3,9 @@ import 'package:biblosphere/src/domain/entities/book.dart';
 import 'package:biblosphere/src/domain/entities/error.dart';
 import 'package:biblosphere/src/ui_kit/buttons.dart';
 import 'package:biblosphere/src/ui_kit/colors.dart';
-import 'package:biblosphere/src/ui_kit/loading.dart';
+import 'package:biblosphere/src/ui_kit/loading_indicator.dart';
 import 'package:biblosphere/src/ui_kit/shadows.dart';
 import 'package:biblosphere/src/ui_kit/styles.dart';
-import 'package:biblosphere/src/ui_kit/topbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +23,7 @@ class _SearchDialogWidget extends StatelessWidget {
   const _SearchDialogWidget({Key? key}) : super(key: key);
 
   static const _searchFieldBorder = UnderlineInputBorder(
-    borderSide: BorderSide(color: AppColors.transparent),
+    borderSide: BorderSide(color: UIColors.transparent),
   );
 
   @override
@@ -37,7 +36,6 @@ class _SearchDialogWidget extends StatelessWidget {
             parent: AlwaysScrollableScrollPhysics(),
           ),
           slivers: [
-            SliverBackButtonAppBar(),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -45,9 +43,9 @@ class _SearchDialogWidget extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text('Ручной ввод',
-                          style: AppStyles.defaultRegularHeadline()),
+                          style: UIStyles.defaultRegularHeadline()),
                     ),
-                    const AppCloseButton(),
+                    const UICloseButton(),
                   ],
                 ),
               ),
@@ -58,9 +56,9 @@ class _SearchDialogWidget extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 16)
                     .copyWith(bottom: 50),
                 decoration: BoxDecoration(
-                  color: AppColors.white,
+                  color: UIColors.white,
                   borderRadius: BorderRadius.circular(15),
-                  boxShadow: AppShadows.lightTitle,
+                  boxShadow: UIShadows.lightTitle,
                 ),
                 child: BlocBuilder<SearchCubit, SearchState>(
                   builder: (_, state) => Column(
@@ -71,8 +69,8 @@ class _SearchDialogWidget extends StatelessWidget {
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.search,
                           textCapitalization: TextCapitalization.sentences,
-                          style: AppStyles.defaultRegularComment(
-                            color: AppColors.black,
+                          style: UIStyles.defaultRegularComment(
+                            color: UIColors.black,
                           ),
                           onChanged:
                               context.read<SearchCubit>().onSearchChanged,
@@ -83,8 +81,8 @@ class _SearchDialogWidget extends StatelessWidget {
                               bottom: 21,
                             ),
                             hintText: 'Добавить еще...',
-                            hintStyle: AppStyles.defaultRegularComment(
-                              color: AppColors.textDeactive,
+                            hintStyle: UIStyles.defaultRegularComment(
+                              color: UIColors.textDeactive,
                             ),
                             border: _searchFieldBorder,
                             enabledBorder: _searchFieldBorder,
@@ -129,7 +127,7 @@ class _SearchDialogWidget extends StatelessWidget {
       height: 64,
       width: 64,
       alignment: Alignment.center,
-      child: const AppLoading(size: 26),
+      child: const UILoadingIndicator(size: 26),
     );
   }
 
@@ -157,7 +155,7 @@ class _SearchDialogWidget extends StatelessWidget {
         decoration: withDivider
             ? const BoxDecoration(
                 border: Border(
-                  bottom: BorderSide(color: AppColors.greyMiddle, width: 1),
+                  bottom: BorderSide(color: UIColors.greyMiddle, width: 1),
                 ),
               )
             : null,
@@ -175,8 +173,8 @@ class _SearchDialogWidget extends StatelessWidget {
         },
         child: Text(
           '${book.title}, ${book.author}',
-          style: AppStyles.defaultRegularComment(
-            color: AppColors.textActive,
+          style: UIStyles.defaultRegularComment(
+            color: UIColors.textActive,
           ),
         ),
       ),
@@ -190,7 +188,7 @@ class _SearchDialogWidget extends StatelessWidget {
         onTap: context.read<SearchCubit>().onLoadUpBooks,
         child: Text(
           'Еще...',
-          style: AppStyles.defaultRegularComment(color: AppColors.textDeactive),
+          style: UIStyles.defaultRegularComment(color: UIColors.textDeactive),
         ),
       ),
     );

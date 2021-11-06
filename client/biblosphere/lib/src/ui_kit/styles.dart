@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-abstract class AppStyles {
+abstract class UIStyles {
   static TextStyle defaultRegularHeadline({Color? color}) => TextStyle(
         fontSize: 17,
         height: 22 / 17,

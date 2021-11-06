@@ -35,15 +35,15 @@ class TabPage extends StatelessWidget {
       return Tab(
         child: Text(
           text,
-          style: AppStyles.defaultRegularHeadline(
-            color: AppColors.accent1,
+          style: UIStyles.defaultRegularHeadline(
+            color: UIColors.accent1,
           ),
         ),
       );
     }
 
     return TabBar(
-      indicatorColor: AppColors.accent1,
+      indicatorColor: UIColors.accent1,
       tabs: titles.map((e) => buildTab(e)).toList(),
     );
   }

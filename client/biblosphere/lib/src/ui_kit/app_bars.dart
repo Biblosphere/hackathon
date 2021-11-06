@@ -9,24 +9,24 @@ import 'package:flutter/services.dart';
 const _kTopbarMobileHeight = 60.0;
 const _kTopbarWebHeight = 140.0;
 const _kElevation = 0.0;
-const _kBackgroundColor = AppColors.white;
+const _kBackgroundColor = UIColors.white;
 const _kSystemOverlayStyle = SystemUiOverlayStyle(
   statusBarBrightness: Brightness.light,
   statusBarIconBrightness: Brightness.dark,
-  statusBarColor: kIsWeb ? null : AppColors.transparent,
+  statusBarColor: kIsWeb ? null : UIColors.transparent,
 );
 final _kLeading = Builder(
   builder: (context) => CupertinoButton(
     onPressed: Navigator.of(context).pop,
     child: const Icon(
       CupertinoIcons.back,
-      color: AppColors.accent1,
+      color: UIColors.accent1,
     ),
   ),
 );
 
-class BackButtonAppBar extends AppBar {
-  BackButtonAppBar({Key? key})
+class UIBackButtonAppBar extends AppBar {
+  UIBackButtonAppBar({Key? key})
       : super(
           key: key,
           elevation: _kElevation,
@@ -43,8 +43,8 @@ class BackButtonAppBar extends AppBar {
       );
 }
 
-class SliverBackButtonAppBar extends SliverAppBar {
-  SliverBackButtonAppBar({
+class UISliverBackButtonAppBar extends SliverAppBar {
+  UISliverBackButtonAppBar({
     Key? key,
   }) : super(
           key: key,

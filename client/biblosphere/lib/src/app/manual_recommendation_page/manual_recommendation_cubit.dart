@@ -4,18 +4,18 @@ import 'package:biblosphere/src/domain/repo/book_repo.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-abstract class RecommendationState extends Equatable {
-  const RecommendationState();
+abstract class ManualRecommendationState extends Equatable {
+  const ManualRecommendationState();
 }
 
-class LoadingState extends RecommendationState {
+class LoadingState extends ManualRecommendationState {
   const LoadingState();
 
   @override
   List<Object?> get props => [];
 }
 
-class LoadedState extends RecommendationState {
+class LoadedState extends ManualRecommendationState {
   const LoadedState({required this.books});
 
   final Iterable<Book> books;
@@ -24,7 +24,7 @@ class LoadedState extends RecommendationState {
   List<Object?> get props => [books];
 }
 
-class ErrorState extends RecommendationState {
+class ErrorState extends ManualRecommendationState {
   const ErrorState({required this.error});
 
   final AppError error;
@@ -33,8 +33,8 @@ class ErrorState extends RecommendationState {
   List<Object?> get props => [error];
 }
 
-class RecommendationCubit extends Cubit<RecommendationState> {
-  RecommendationCubit(
+class ManualRecommendationCubit extends Cubit<ManualRecommendationState> {
+  ManualRecommendationCubit(
     this._books,
     this._bookRepo,
   ) : super(const LoadingState()) {
@@ -46,7 +46,7 @@ class RecommendationCubit extends Cubit<RecommendationState> {
 
   void onReload() async {
     emit(const LoadingState());
-    final eitherBooks = await _bookRepo.getRecomendedBooks(_books);
+    final eitherBooks = await _bookRepo.getRecomendationsByBooks(_books);
     if (eitherBooks.success) {
       emit(LoadedState(books: eitherBooks.data!));
     } else {

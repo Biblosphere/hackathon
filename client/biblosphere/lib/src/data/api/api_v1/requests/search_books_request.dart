@@ -1,15 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:biblosphere/src/data/base_api_v1.dart';
+import 'package:biblosphere/src/data/api/base_api.dart';
 import 'package:biblosphere/src/data/mapper/book_mapper.dart';
 import 'package:biblosphere/src/domain/entities/book.dart';
 import 'package:biblosphere/src/domain/entities/error.dart';
 import 'package:http/http.dart' as http;
 import 'package:biblosphere/src/core/either.dart';
 
-mixin SearchTopBooksRequest on BaseApiV1 {
-  @override
-  Future<Either<Iterable<Book>>> searchTopBooks(String source, int count) {
+mixin SearchTopBooksRequest on BaseApi {
+  Future<Either<Iterable<Book>>> searchBooks(String source, int count) {
     final completer = Completer<Either<Iterable<Book>>>();
     http
         .post(

@@ -1,91 +1,29 @@
 import 'package:biblosphere/src/domain/entities/book.dart';
-import 'package:biblosphere/src/domain/entities/error.dart';
-import 'package:biblosphere/src/app/recommendation_page/recommendation_cubit.dart';
 import 'package:biblosphere/src/ui_kit/buttons.dart';
 import 'package:biblosphere/src/ui_kit/colors.dart';
 import 'package:biblosphere/src/ui_kit/icons.dart';
-import 'package:biblosphere/src/ui_kit/loading.dart';
+import 'package:biblosphere/src/ui_kit/loading_indicator.dart';
 import 'package:biblosphere/src/ui_kit/shadows.dart';
 import 'package:biblosphere/src/ui_kit/styles.dart';
-import 'package:biblosphere/src/ui_kit/topbar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RecommendationPage extends BlocProvider<RecommendationCubit> {
-  RecommendationPage({Key? key, required Iterable<Book> books})
-      : super(
-          key: key,
-          create: (context) => RecommendationCubit(books, context.read()),
-          child: const _GuidPageWidget(),
-        );
-}
+class BookCard extends StatelessWidget {
+  const BookCard({Key? key, required this.book}) : super(key: key);
 
-class _GuidPageWidget extends StatelessWidget {
-  const _GuidPageWidget({Key? key}) : super(key: key);
+  final Book book;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        physics: const BouncingScrollPhysics(
-          parent: AlwaysScrollableScrollPhysics(),
-        ),
-        slivers: [
-          SliverBackButtonAppBar(),
-          const SliverToBoxAdapter(child: SizedBox(height: 40)),
-          _buildSliverBookList(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSliverBookList() {
-    return BlocBuilder<RecommendationCubit, RecommendationState>(
-      builder: (context, state) {
-        if (state is LoadedState) {
-          return SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                if (index == 0) return buildSubtitle();
-                if (index == 1) return const SizedBox(height: 20);
-                index -= 2;
-                return _buildBookCard(state.books.elementAt(index));
-              },
-              childCount: state.books.length + 2,
-            ),
-          );
-        }
-        if (state is ErrorState) {
-          return SliverToBoxAdapter(
-            child: _buildError(state.error),
-          );
-        }
-        return SliverToBoxAdapter(child: _buildLoading());
-      },
-    );
-  }
-
-  Widget buildSubtitle() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
-      child: Text(
-        'Вам может понравиться:',
-        style: AppStyles.defaultRegularHeadline(),
-      ),
-    );
-  }
-
-  Widget _buildBookCard(Book book) {
     return Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: UIColors.white,
         borderRadius: BorderRadius.circular(10),
-        boxShadow: AppShadows.lightTitle,
+        boxShadow: UIShadows.lightTitle,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -107,72 +45,74 @@ class _GuidPageWidget extends StatelessWidget {
                   children: [
                     Text(
                       book.title,
-                      style: AppStyles.defaultRegularHeadline(
-                        color: AppColors.textActive,
+                      style: UIStyles.defaultRegularHeadline(
+                        color: UIColors.textActive,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       'Автор: ${book.author}',
-                      style: AppStyles.defaultRegularComment(
-                        color: AppColors.line,
+                      style: UIStyles.defaultRegularComment(
+                        color: UIColors.line,
                       ),
                     ),
                     if (book.description != null) ...[
                       const SizedBox(height: 20),
                       Text(
                         'Описание:',
-                        style: AppStyles.defaultRegularBody(
-                          color: AppColors.greyHeavy,
+                        style: UIStyles.defaultRegularBody(
+                          color: UIColors.greyHeavy,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         book.description!,
                         maxLines: 2,
-                        style: AppStyles.defaultRegularComment(
-                          color: AppColors.greyHard,
+                        style: UIStyles.defaultRegularComment(
+                          color: UIColors.greyHard,
                         ),
                       ),
                     ],
-                    const SizedBox(height: 4),
-                    Builder(
-                      builder: (context) => GestureDetector(
-                        onTap: () => showCupertinoModalPopup(
-                          context: context,
-                          builder: (_) => _buildDescriptionPopup(
-                            book.description!,
+                    if (book.description != null) ...[
+                      const SizedBox(height: 4),
+                      Builder(
+                        builder: (context) => GestureDetector(
+                          onTap: () => showCupertinoModalPopup(
+                            context: context,
+                            builder: (_) => _buildDescriptionPopup(
+                              book.description!,
+                            ),
                           ),
-                        ),
-                        child: Container(
-                          height: 22,
-                          color: AppColors.transparent,
-                          child: Text(
-                            'Подробнее',
-                            style: AppStyles.defaultRegularComment(
-                              color: AppColors.accent1,
+                          child: Container(
+                            height: 22,
+                            color: UIColors.transparent,
+                            child: Text(
+                              'Подробнее',
+                              style: UIStyles.defaultRegularComment(
+                                color: UIColors.accent1,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ],
                 ),
               ),
             ],
           ),
           const SizedBox(height: 32),
-          AppButton(
+          UIButton(
             onTap: () {},
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const AppIcon(AppIcons.geo, color: AppColors.white),
+                const UIIcon(UIIcons.geo, color: UIColors.white),
                 const SizedBox(width: 20),
                 Text(
                   'Забронировать',
-                  style: AppStyles.defaultRegularHeadline(),
+                  style: UIStyles.defaultRegularHeadline(),
                 ),
               ],
             ),
@@ -180,24 +120,6 @@ class _GuidPageWidget extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Widget _buildError(AppError error) {
-    return Column(
-      children: [
-        Text('$error'),
-        Builder(
-          builder: (context) => AppButton(
-            onTap: context.read<RecommendationCubit>().onReload,
-            child: const Text('Обновить'),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLoading() {
-    return const Center(child: AppLoading(size: 22));
   }
 
   Widget _buildBookImage(String? imageUrl) {
@@ -211,8 +133,8 @@ class _GuidPageWidget extends StatelessWidget {
           height: height,
           width: width,
           decoration: BoxDecoration(
-            color: AppColors.book,
-            boxShadow: AppShadows.lightTitle,
+            color: UIColors.book,
+            boxShadow: UIShadows.lightTitle,
             borderRadius: BorderRadius.circular(7),
           ),
           child: (imageUrl == null)
@@ -226,7 +148,7 @@ class _GuidPageWidget extends StatelessWidget {
                         alignment: Alignment.center,
                         children: [
                           placeholder,
-                          AppLoading(
+                          UILoadingIndicator(
                             progress: progress.progress,
                             size: 17,
                             width: 2,
@@ -247,7 +169,7 @@ class _GuidPageWidget extends StatelessWidget {
 
   Widget _buildDescriptionPopup(String description) {
     return Material(
-      color: AppColors.white,
+      color: UIColors.white,
       child: SafeArea(
         child: ListView(
           physics: const BouncingScrollPhysics(
@@ -262,12 +184,12 @@ class _GuidPageWidget extends StatelessWidget {
               children: [
                 Text(
                   'Подробнее',
-                  style: AppStyles.defaultRegularHeadline(),
+                  style: UIStyles.defaultRegularHeadline(),
                 ),
                 Builder(
                   builder: (context) => GestureDetector(
                     onTap: Navigator.of(context).pop,
-                    child: const AppIcon(AppIcons.close),
+                    child: const UIIcon(UIIcons.close),
                   ),
                 ),
               ],
@@ -275,7 +197,7 @@ class _GuidPageWidget extends StatelessWidget {
             const SizedBox(height: 20),
             Text(
               description,
-              style: AppStyles.defaultRegularBody(color: AppColors.greyHard),
+              style: UIStyles.defaultRegularBody(color: UIColors.greyHard),
             ),
           ],
         ),

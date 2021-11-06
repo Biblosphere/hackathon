@@ -1,8 +1,8 @@
 import 'package:biblosphere/src/ui_kit/colors.dart';
 import 'package:flutter/material.dart';
 
-class AppLoading extends StatelessWidget {
-  const AppLoading({
+class UILoadingIndicator extends StatelessWidget {
+  const UILoadingIndicator({
     Key? key,
     this.size = 10,
     this.width = 2.5,
@@ -21,7 +21,7 @@ class AppLoading extends StatelessWidget {
       child: CircularProgressIndicator(
         value: progress,
         strokeWidth: width,
-        valueColor: const AlwaysStoppedAnimation(AppColors.accent1),
+        valueColor: const AlwaysStoppedAnimation(UIColors.accent1),
       ),
     );
   }

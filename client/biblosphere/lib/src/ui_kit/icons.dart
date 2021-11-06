@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-enum AppIcons {
+enum UIIcons {
   camera,
   close,
   dislike,
@@ -16,41 +16,41 @@ enum AppIcons {
   trash,
 }
 
-extension _AppIconsPath on AppIcons {
+extension _UIIconsPath on UIIcons {
   static const iconsPath = 'assets/icons';
 
   String get path {
     switch (this) {
-      case AppIcons.camera:
+      case UIIcons.camera:
         return '$iconsPath/camera.svg';
-      case AppIcons.close:
+      case UIIcons.close:
         return '$iconsPath/close.svg';
-      case AppIcons.dislike:
+      case UIIcons.dislike:
         return '$iconsPath/dislike.svg';
-      case AppIcons.geo:
+      case UIIcons.geo:
         return '$iconsPath/geo.svg';
-      case AppIcons.heartDislike:
+      case UIIcons.heartDislike:
         return '$iconsPath/heart_dislike.svg';
-      case AppIcons.heartLike:
+      case UIIcons.heartLike:
         return '$iconsPath/heart_like.svg';
-      case AppIcons.like:
+      case UIIcons.like:
         return '$iconsPath/like.svg';
-      case AppIcons.logoText:
+      case UIIcons.logoText:
         return '$iconsPath/logo_text.svg';
-      case AppIcons.logo:
+      case UIIcons.logo:
         return '$iconsPath/logo.svg';
-      case AppIcons.menu:
+      case UIIcons.menu:
         return '$iconsPath/menu.svg';
-      case AppIcons.thunder:
+      case UIIcons.thunder:
         return '$iconsPath/thunder.svg';
-      case AppIcons.trash:
+      case UIIcons.trash:
         return '$iconsPath/trash.svg';
     }
   }
 }
 
-class AppIcon extends StatelessWidget {
-  const AppIcon(
+class UIIcon extends StatelessWidget {
+  const UIIcon(
     this.icon, {
     Key? key,
     this.fit = BoxFit.contain,
@@ -59,7 +59,7 @@ class AppIcon extends StatelessWidget {
     this.color,
   }) : super(key: key);
 
-  final AppIcons icon;
+  final UIIcons icon;
   final BoxFit fit;
   final double? height;
   final double? width;

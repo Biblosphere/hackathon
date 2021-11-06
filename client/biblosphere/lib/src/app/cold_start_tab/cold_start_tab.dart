@@ -1,5 +1,5 @@
 import 'package:biblosphere/src/app/cold_start_tab/cold_start_cubit.dart';
-import 'package:biblosphere/src/app/recommendation_page/recommendation_page.dart';
+import 'package:biblosphere/src/app/manual_recommendation_page/manual_recommendation_page.dart';
 import 'package:biblosphere/src/app/search_dialog/search_dialog.dart';
 import 'package:biblosphere/src/core/selectable_value.dart';
 import 'package:biblosphere/src/domain/entities/book.dart';
@@ -66,7 +66,7 @@ class _ColdStartTabWidget extends StatelessWidget {
       child: Text(
         'Ручной ввод',
         maxLines: 1,
-        style: AppStyles.defaultRegularHeadline(),
+        style: UIStyles.defaultRegularHeadline(),
       ),
     );
   }
@@ -91,7 +91,7 @@ class _ColdStartTabWidget extends StatelessWidget {
       height: 64,
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.greyMiddle)),
+        border: Border(bottom: BorderSide(color: UIColors.greyMiddle)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -101,8 +101,7 @@ class _ColdStartTabWidget extends StatelessWidget {
               '${book.title}, ${book.author}',
               maxLines: 1,
               softWrap: false,
-              style:
-                  AppStyles.defaultRegularComment(color: AppColors.textActive),
+              style: UIStyles.defaultRegularComment(color: UIColors.textActive),
             ),
           ),
           PopupMenuButton(
@@ -110,8 +109,8 @@ class _ColdStartTabWidget extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            color: AppColors.white,
-            icon: const AppIcon(AppIcons.menu),
+            color: UIColors.white,
+            icon: const UIIcon(UIIcons.menu),
             itemBuilder: (context) => [
               PopupMenuItem(
                 height: 24,
@@ -120,15 +119,15 @@ class _ColdStartTabWidget extends StatelessWidget {
                     context.read<ColdStartCubit>().onRemoveManualBook(book),
                 child: Row(
                   children: [
-                    const AppIcon(
-                      AppIcons.trash,
-                      color: AppColors.accent1,
+                    const UIIcon(
+                      UIIcons.trash,
+                      color: UIColors.accent1,
                     ),
                     const SizedBox(width: 12),
                     Text(
                       'Удалить',
-                      style: AppStyles.defaultRegularComment(
-                        color: AppColors.greyHard,
+                      style: UIStyles.defaultRegularComment(
+                        color: UIColors.greyHard,
                       ),
                     ),
                   ],
@@ -152,7 +151,7 @@ class _ColdStartTabWidget extends StatelessWidget {
           onPressed: () async {
             final book = await showDialog<Book>(
               context: context,
-              barrierColor: AppColors.transparent,
+              barrierColor: UIColors.transparent,
               builder: (_) => SearchDialog(),
             );
             if (book != null) {
@@ -162,8 +161,7 @@ class _ColdStartTabWidget extends StatelessWidget {
           child: Text(
             '+ Добавить еще',
             textAlign: TextAlign.start,
-            style:
-                AppStyles.defaultRegularComment(color: AppColors.textDeactive),
+            style: UIStyles.defaultRegularComment(color: UIColors.textDeactive),
           ),
         ),
       ),
@@ -199,18 +197,18 @@ class _ColdStartTabWidget extends StatelessWidget {
                 .map((e) => e.value),
             ...state.manualBooks,
           ];
-          return AppButton(
+          return UIButton(
             active: books.isNotEmpty,
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => RecommendationPage(books: books),
+                  builder: (_) => ManualRecommendationPage(books: books),
                 ),
               );
             },
             child: Text(
               'Подобрать рекомендации',
-              style: AppStyles.defaultRegularHeadline(color: AppColors.white),
+              style: UIStyles.defaultRegularHeadline(color: UIColors.white),
             ),
           );
         },
@@ -252,7 +250,7 @@ class _RecommendationPanelState extends State<_RecommendationPanel> {
               title: Text(
                 'Рекомендации',
                 maxLines: 1,
-                style: AppStyles.defaultRegularHeadline(),
+                style: UIStyles.defaultRegularHeadline(),
               ),
             ),
           ),
@@ -271,7 +269,7 @@ class _RecommendationPanelState extends State<_RecommendationPanel> {
       alignment: Alignment.centerLeft,
       decoration: const BoxDecoration(
         border: Border(
-          bottom: BorderSide(color: AppColors.greyMiddle),
+          bottom: BorderSide(color: UIColors.greyMiddle),
         ),
       ),
       child: Row(
@@ -282,12 +280,11 @@ class _RecommendationPanelState extends State<_RecommendationPanel> {
               maxLines: 1,
               softWrap: false,
               overflow: TextOverflow.ellipsis,
-              style:
-                  AppStyles.defaultRegularComment(color: AppColors.textActive),
+              style: UIStyles.defaultRegularComment(color: UIColors.textActive),
             ),
           ),
           Checkbox(
-            activeColor: AppColors.accent1,
+            activeColor: UIColors.accent1,
             value: selectableBook.isSelected,
             onChanged: (isSelected) => widget.onChanged(
               selectableBook.value,

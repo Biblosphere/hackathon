@@ -1,15 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:biblosphere/src/data/base_api_v2.dart';
+import 'package:biblosphere/src/data/api/base_api.dart';
 import 'package:biblosphere/src/data/mapper/book_mapper.dart';
 import 'package:biblosphere/src/domain/entities/error.dart';
 import 'package:http/http.dart' as http;
 import 'package:biblosphere/src/core/either.dart';
 import 'package:biblosphere/src/domain/entities/book.dart';
 
-mixin GetRecommendationsRequest on BaseApiV2 {
-  @override
-  Future<Either<Iterable<Book>>> getRecomandations(
+mixin GetRecommendationsRequest on BaseApi {
+  Future<Either<Iterable<Book>>> getRecomendationsByBooks(
     Iterable<Book> likeBooks,
   ) {
     final completer = Completer<Either<Iterable<Book>>>();

@@ -35,26 +35,26 @@ class _IdSearchTabWidget extends StatelessWidget {
 
   Widget _buildIdField() {
     const border = UnderlineInputBorder(
-      borderSide: BorderSide(color: AppColors.transparent),
+      borderSide: BorderSide(color: UIColors.transparent),
     );
     return Container(
       height: 68,
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: UIColors.white,
         borderRadius: BorderRadius.circular(15),
-        boxShadow: AppShadows.lightTitle,
+        boxShadow: UIShadows.lightTitle,
       ),
       child: Builder(
         builder: (context) => TextField(
           onChanged: context.read<IdSearchCubit>().onIdChanged,
-          style: AppStyles.defaultRegularBody(color: AppColors.black),
+          style: UIStyles.defaultRegularBody(color: UIColors.black),
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.fromLTRB(20, 23, 4, 23),
             hintText: 'Введите Ваш id',
-            hintStyle: AppStyles.defaultRegularBody(
-              color: AppColors.textDeactive,
+            hintStyle: UIStyles.defaultRegularBody(
+              color: UIColors.textDeactive,
             ),
             border: border,
             errorBorder: border,
@@ -74,7 +74,7 @@ class _IdSearchTabWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: BlocBuilder<IdSearchCubit, IdSearchState>(
         buildWhen: (prev, cur) => prev.id != cur.id,
-        builder: (context, state) => AppButton(
+        builder: (context, state) => UIButton(
           active: state.id.isNotEmpty,
           onTap: () {
             Navigator.of(context).push(
@@ -85,7 +85,7 @@ class _IdSearchTabWidget extends StatelessWidget {
           },
           child: Text(
             'Подобрать рекомендации',
-            style: AppStyles.defaultRegularHeadline(color: AppColors.white),
+            style: UIStyles.defaultRegularHeadline(color: UIColors.white),
           ),
         ),
       ),

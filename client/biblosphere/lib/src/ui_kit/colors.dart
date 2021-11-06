@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-abstract class AppColors {
+abstract class UIColors {
   static const black = Colors.black;
   static const white = Colors.white;
   static const transparent = Colors.transparent;

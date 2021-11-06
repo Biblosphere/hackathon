@@ -1,13 +1,10 @@
+import 'package:biblosphere/src/app/book_card.dart';
 import 'package:biblosphere/src/app/id_recommendation_page/id_recommendation_cubit.dart';
-import 'package:biblosphere/src/domain/entities/book.dart';
 import 'package:biblosphere/src/domain/entities/error.dart';
 import 'package:biblosphere/src/ui_kit/buttons.dart';
-import 'package:biblosphere/src/ui_kit/colors.dart';
-import 'package:biblosphere/src/ui_kit/icons.dart';
-import 'package:biblosphere/src/ui_kit/loading.dart';
-import 'package:biblosphere/src/ui_kit/shadows.dart';
+import 'package:biblosphere/src/ui_kit/loading_indicator.dart';
 import 'package:biblosphere/src/ui_kit/styles.dart';
-import 'package:biblosphere/src/ui_kit/topbar.dart';
+import 'package:biblosphere/src/ui_kit/app_bars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,7 +28,7 @@ class _IdRecommendationPageWidget extends StatelessWidget {
           parent: AlwaysScrollableScrollPhysics(),
         ),
         slivers: [
-          SliverBackButtonAppBar(),
+          UISliverBackButtonAppBar(),
           const SliverToBoxAdapter(child: SizedBox(height: 40)),
           SliverToBoxAdapter(child: _buildSubtitle()),
           const SliverToBoxAdapter(child: SizedBox(height: 20)),
@@ -46,7 +43,7 @@ class _IdRecommendationPageWidget extends StatelessWidget {
       padding: const EdgeInsets.only(left: 16),
       child: Text(
         'Вам может понравиться:',
-        style: AppStyles.defaultRegularHeadline(),
+        style: UIStyles.defaultRegularHeadline(),
       ),
     );
   }
@@ -57,9 +54,7 @@ class _IdRecommendationPageWidget extends StatelessWidget {
         if (state is LoadedState) {
           return SliverList(
             delegate: SliverChildBuilderDelegate(
-              (context, index) => _buildBookCard(
-                state.books.elementAt(index),
-              ),
+              (context, index) => BookCard(book: state.books.elementAt(index)),
               childCount: state.books.length,
             ),
           );
@@ -69,90 +64,8 @@ class _IdRecommendationPageWidget extends StatelessWidget {
             child: _buildLoadingBooksError(state.error),
           );
         }
-        return SliverToBoxAdapter(child: _buildLoading());
+        return SliverToBoxAdapter(child: _buildLoadingIndicator());
       },
-    );
-  }
-
-  Widget _buildBookCard(Book book) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: AppShadows.lightTitle,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Builder(
-                builder: (context) {
-                  final screenWidth = MediaQuery.of(context).size.width;
-                  final width = screenWidth * 0.31734;
-                  final height = width * 1.34453782;
-                  return Container(
-                    height: height,
-                    width: width,
-                    decoration: BoxDecoration(
-                      color: AppColors.book,
-                      boxShadow: AppShadows.lightTitle,
-                      borderRadius: BorderRadius.circular(7),
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(width: 20),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      book.title,
-                      style: AppStyles.defaultRegularHeadline(
-                        color: AppColors.textActive,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Автор: ${book.author}',
-                      style: AppStyles.defaultRegularComment(
-                        color: AppColors.line,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 32),
-          AppButton(
-            onTap: () {},
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const AppIcon(AppIcons.geo, color: AppColors.white),
-                const SizedBox(width: 20),
-                Text(
-                  'Забронировать',
-                  style: AppStyles.defaultRegularHeadline(),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -169,7 +82,7 @@ class _IdRecommendationPageWidget extends StatelessWidget {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: AppButton(
+            child: UIButton(
               onTap: context.read<IdRecommendationCubit>().onReload,
               child: const Text('Обновить'),
             ),
@@ -179,7 +92,7 @@ class _IdRecommendationPageWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildLoading() {
-    return const Center(child: AppLoading(size: 22));
+  Widget _buildLoadingIndicator() {
+    return const Center(child: UILoadingIndicator(size: 22));
   }
 }

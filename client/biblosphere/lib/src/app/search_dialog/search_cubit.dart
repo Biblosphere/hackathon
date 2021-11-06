@@ -61,7 +61,7 @@ class SearchCubit extends Cubit<SearchState> {
     _search = search;
     if (search.isEmpty) return emit(const InitialState());
     emit(const LoadingState());
-    final either = await _bookRepo.searchTopBooks(search, _initialBookCount);
+    final either = await _bookRepo.searchBooks(search, _initialBookCount);
     if (search == _search) {
       if (either.success) {
         emit(LoadedState(
@@ -83,7 +83,7 @@ class SearchCubit extends Cubit<SearchState> {
       loading: true,
       finish: false,
     ));
-    final either = await _bookRepo.searchTopBooks(
+    final either = await _bookRepo.searchBooks(
       _search,
       state.book.length + _stepBookCount,
     );

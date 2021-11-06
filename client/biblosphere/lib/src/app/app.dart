@@ -10,14 +10,14 @@ class App extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         brightness: Brightness.light,
-        colorScheme: const ColorScheme.light(secondary: AppColors.accent1),
-        scaffoldBackgroundColor: AppColors.white,
+        colorScheme: const ColorScheme.light(secondary: UIColors.accent1),
+        scaffoldBackgroundColor: UIColors.white,
         dividerTheme: const DividerThemeData(
-          color: AppColors.greyMiddle,
+          color: UIColors.greyMiddle,
           thickness: 1,
         ),
         textSelectionTheme: const TextSelectionThemeData(
-          cursorColor: AppColors.accent1,
+          cursorColor: UIColors.accent1,
         ),
       ),
       home: const TabPage(),
