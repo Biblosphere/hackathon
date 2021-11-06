@@ -23,7 +23,8 @@ mixin SearchBooksRequest on BaseApi {
     )
         .then((response) {
       if (response.statusCode == 200) {
-        final json = (jsonDecode(response.body) as Map).cast<String, dynamic>();
+        final json = (jsonDecode(response.body.replaceAll('NaN', '""')) as Map)
+            .cast<String, dynamic>();
         final books = BooksMapper.fromJson('books', json);
         completer.complete(Either.success(books));
       } else {
